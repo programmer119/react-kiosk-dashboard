@@ -74,7 +74,6 @@ const languageText = {
     langButton: "EN",
     heroTitle: "상태를 선택하면 추천 상품이 즉시 바뀝니다",
     heroLead: "사용자의 선택값을 추천 엔진 입력값으로 보고, 상품 ID, 슬롯, 카트리지 정보를 함께 갱신합니다.",
-    devSmall: "개발 작업 보기",
     dispense: "추천 상품 토출하기",
     needLabels: {
       fatigue: "피로감 높음",
@@ -91,7 +90,6 @@ const languageText = {
     langButton: "KO",
     heroTitle: "Recommendations update as the user selects a need",
     heroLead: "The selected need is treated as recommendation input, then product ID, slot, and cartridge data are refreshed together.",
-    devSmall: "Dev tasks",
     dispense: "Dispense recommended item",
     needLabels: {
       fatigue: "High fatigue",
@@ -170,7 +168,6 @@ function renderLanguage() {
   languageToggle.textContent = text.langButton;
   document.querySelector("#kiosk-title").textContent = text.heroTitle;
   document.querySelector(".hero-flow .lead").textContent = text.heroLead;
-  document.querySelector(".tiny-link-button").textContent = text.devSmall;
   dispenseButton.textContent = text.dispense;
   choiceButtons.forEach((button) => {
     button.textContent = text.needLabels[button.dataset.need];

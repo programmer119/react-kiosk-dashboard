@@ -197,17 +197,6 @@ h1 {
   gap: 10px;
 }
 
-.tiny-link-button {
-  min-height: 34px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 0 12px;
-  color: var(--brand-dark);
-  background: #fff;
-  font-size: 12px;
-  font-weight: 900;
-}
-
 .hero-flow h2,
 .section-head h2 {
   margin-bottom: 12px;
