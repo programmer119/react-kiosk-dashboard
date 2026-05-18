@@ -90,7 +90,7 @@
                 <span class="status-dot standby"></span>
                 <strong>사용자 확인 대기</strong>
               </div>
-              <p>토출 버튼을 누르면 하드웨어 명령 전송, 완료 체크, Google Sheets 로그 저장 순서로 진행됩니다.</p>
+              <p>토출 버튼을 누르면 하드웨어 명령 전송, 완료 체크, 관리자 콘솔 로그 기록 순서로 진행됩니다.</p>
             </section>
           </div>
         </div>
@@ -111,8 +111,8 @@
               <p id="successCount">성공 36 / 실패 2</p>
             </article>
             <article class="metric-card">
-              <span>연동 상태</span>
-              <strong id="integrationState">설정 필요</strong>
+              <span>로그 시트</span>
+              <strong id="integrationState">링크 연결</strong>
               <p>Google Sheets</p>
             </article>
             <article class="metric-card">
@@ -122,27 +122,11 @@
             </article>
           </div>
 
-          <section class="integration-panel">
-            <div>
-              <h3>실제 로그 연동 설정</h3>
-              <p>Google Apps Script Web App URL을 입력하면 토출 완료 시 Google Sheets로 로그를 전송합니다.</p>
-            </div>
-            <label>
-              Google Apps Script Web App URL
-              <input
-                id="sheetWebhookUrl"
-                type="url"
-                placeholder="https://script.google.com/macros/s/..."
-              />
-            </label>
-            <button id="saveIntegration" class="primary-button">연동 설정 저장</button>
-          </section>
-
           <section class="sheet-link-panel" aria-labelledby="sheet-link-title">
             <div>
               <span>Google Sheets 로그</span>
               <h3 id="sheet-link-title">토출 로그 시트</h3>
-              <p>실제 토출 결과가 누적되는 공유용 스프레드시트입니다.</p>
+              <p>토출 로그를 확인하는 공유용 스프레드시트입니다.</p>
             </div>
             <a
               id="sheetLink"
@@ -229,9 +213,9 @@
               <span class="work-index">04</span>
               <h3>Google Sheets 연동</h3>
               <ul>
-                <li>Apps Script Web App URL 입력</li>
-                <li>토출 완료 시 POST 요청</li>
-                <li>설정값 없을 때 저장 필요 상태 표시</li>
+                <li>토출 로그 시트 링크 표시</li>
+                <li>시트 바로 열기 및 링크 복사 제공</li>
+                <li>관리자 콘솔에서 화면 로그 확인</li>
               </ul>
             </article>
             <article class="work-card pending">

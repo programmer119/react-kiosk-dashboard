@@ -11,14 +11,9 @@ const logRows = document.querySelector("#logRows");
 const integrationState = document.querySelector("#integrationState");
 const dispenseCount = document.querySelector("#dispenseCount");
 const successCount = document.querySelector("#successCount");
-const saveIntegration = document.querySelector("#saveIntegration");
 const languageToggle = document.querySelector("#languageToggle");
 const sheetLink = document.querySelector("#sheetLink");
 const copySheetLink = document.querySelector("#copySheetLink");
-
-const integrationInputs = {
-  sheetWebhookUrl: document.querySelector("#sheetWebhookUrl"),
-};
 
 const recommendations = {
   fatigue: {
@@ -185,48 +180,12 @@ function renderStatus(dot, label, body) {
   `;
 }
 
-function getIntegrationConfig() {
-  return {
-    sheetWebhookUrl: localStorage.getItem("sheetWebhookUrl") || "",
-  };
-}
-
-function restoreIntegrationConfig() {
-  const config = getIntegrationConfig();
-  integrationInputs.sheetWebhookUrl.value = config.sheetWebhookUrl;
-  updateIntegrationState();
-}
-
 function updateIntegrationState() {
-  const config = getIntegrationConfig();
-  const sheetReady = Boolean(config.sheetWebhookUrl);
-
-  integrationState.textContent = sheetReady ? "Google Sheets 연결" : "설정 필요";
-}
-
-async function sendToGoogleSheets(payload) {
-  const config = getIntegrationConfig();
-  if (!config.sheetWebhookUrl) {
-    return "Google Sheets 설정 필요";
-  }
-
-  const response = await fetch(config.sheetWebhookUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Google Sheets ${response.status}`);
-  }
-
-  return "Google Sheets 저장 성공";
+  integrationState.textContent = "링크 연결";
 }
 
 async function sendLogs(payload) {
-  return sendToGoogleSheets(payload);
+  return "관리자 콘솔 기록 완료";
 }
 
 function addLogRow(payload, saveResult) {
@@ -264,7 +223,7 @@ async function runDispenseFlow() {
 
   window.setTimeout(async () => {
     const payload = makePayload("success");
-    renderStatus("standby", "Google Sheets 저장 중", "토출 이력과 추천 로그를 Google Sheets로 전송합니다.");
+    renderStatus("standby", "로그 기록 중", "토출 이력과 추천 로그를 관리자 콘솔에 기록합니다.");
 
     let saveResult = "";
     try {
@@ -297,14 +256,6 @@ choiceButtons.forEach((button) => {
   });
 });
 
-saveIntegration.addEventListener("click", () => {
-  Object.entries(integrationInputs).forEach(([key, input]) => {
-    localStorage.setItem(key, input.value.trim());
-  });
-  updateIntegrationState();
-  renderStatus("success", "연동 설정 저장 완료", "다음 토출부터 Google Sheets 전송을 시도합니다.");
-});
-
 copySheetLink.addEventListener("click", async () => {
   const url = sheetLink.href;
   try {
@@ -327,6 +278,6 @@ languageToggle.addEventListener("click", () => {
 
 dispenseButton.addEventListener("click", runDispenseFlow);
 
-restoreIntegrationConfig();
 renderLanguage();
+updateIntegrationState();
 updateMetrics();
