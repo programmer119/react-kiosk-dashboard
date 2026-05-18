@@ -3,11 +3,261 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>React Kiosk Dashboard</title>
-    <script type="module" crossorigin src="./assets/index-TFRC12gD.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-5bcCJF84.css">
+    <title>AI 무인 자판기 키오스크 MVP</title>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div id="root"></div>
+    <main class="app-shell">
+      <header class="top-bar">
+        <div>
+          <p class="eyebrow">Android Vending Kiosk MVP</p>
+          <h1>AI 맞춤 추천 무인 자판기</h1>
+        </div>
+        <nav class="top-actions" aria-label="화면 이동">
+          <button class="nav-button active" data-view="kiosk">키오스크</button>
+          <button class="nav-button" data-view="operator">운영자</button>
+          <button class="nav-button" data-view="dev">개발 페이지</button>
+          <button id="languageToggle" class="nav-button lang-toggle" type="button">EN</button>
+        </nav>
+      </header>
+
+      <section id="kiosk" class="view active" aria-labelledby="kiosk-title">
+        <div class="kiosk-frame">
+          <aside class="step-panel">
+            <p class="panel-label">사용자 흐름</p>
+            <ol class="step-list">
+              <li class="current">상태 선택</li>
+              <li>AI 추천 결과</li>
+              <li>사용자 확인</li>
+              <li>제품 토출</li>
+              <li>로그 저장</li>
+            </ol>
+            <div class="device-status">
+              <span class="status-dot online"></span>
+              Android 태블릿 연결됨
+            </div>
+            <div class="device-status">
+              <span class="status-dot standby"></span>
+              토출 모듈 대기 중
+            </div>
+          </aside>
+
+          <div class="kiosk-screen">
+            <section class="hero-flow">
+              <div>
+                <p class="eyebrow">Step 01</p>
+                <h2 id="kiosk-title">상태를 선택하면 추천 상품이 즉시 바뀝니다</h2>
+                <p class="lead">
+                  사용자의 선택값을 추천 엔진 입력값으로 보고, 상품 ID, 슬롯, 카트리지 정보를 함께 갱신합니다.
+                </p>
+              </div>
+              <div class="hero-tools">
+                <button class="tiny-link-button" data-view="dev">개발 작업 보기</button>
+                <div class="clock-card">
+                  <span>PoC 기기</span>
+                  <strong>VND-A01</strong>
+                </div>
+              </div>
+            </section>
+
+            <section class="input-grid" aria-label="사용자 입력">
+              <button class="choice selected" data-need="fatigue">피로감 높음</button>
+              <button class="choice" data-need="focus">집중 필요</button>
+              <button class="choice" data-need="hydration">수분 보충</button>
+              <button class="choice" data-need="snack">가벼운 간식</button>
+            </section>
+
+            <section class="recommendation-card">
+              <div class="product-visual">
+                <div id="productVisual" class="product-can fatigue"></div>
+              </div>
+              <div class="recommendation-copy">
+                <p class="eyebrow">AI 추천 결과 JSON</p>
+                <h3 id="productName">비타민 에너지 드링크</h3>
+                <p id="productSummary">
+                  추천 상품 ID <strong>SKU-ENERGY-02</strong>, 슬롯 <strong>A-03</strong>,
+                  카트리지 <strong>2번</strong>으로 매핑되었습니다.
+                </p>
+                <pre id="recommendationJson"></pre>
+              </div>
+            </section>
+
+            <div class="kiosk-actions">
+              <button id="dispenseButton" class="primary-button">추천 상품 토출하기</button>
+            </div>
+
+            <section id="dispenseStatus" class="dispense-status" aria-live="polite">
+              <div class="status-row">
+                <span class="status-dot standby"></span>
+                <strong>사용자 확인 대기</strong>
+              </div>
+              <p>토출 버튼을 누르면 하드웨어 명령 전송, 완료 체크, Supabase/Google Sheets 로그 저장 순서로 진행됩니다.</p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section id="operator" class="view" aria-labelledby="operator-title">
+        <div class="dashboard-layout">
+          <section class="section-head">
+            <p class="eyebrow">Operator Console</p>
+            <h2 id="operator-title">운영자 관리 화면</h2>
+            <p class="lead">토출 이력, 추천 로그, 재고 및 카트리지 상태를 확인하는 MVP 관리 페이지입니다.</p>
+          </section>
+
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span>오늘 토출</span>
+              <strong id="dispenseCount">38건</strong>
+              <p id="successCount">성공 36 / 실패 2</p>
+            </article>
+            <article class="metric-card">
+              <span>연동 상태</span>
+              <strong id="integrationState">설정 필요</strong>
+              <p>Supabase / Google Sheets</p>
+            </article>
+            <article class="metric-card">
+              <span>재고 경고</span>
+              <strong>2개</strong>
+              <p>A-03, B-01 보충 필요</p>
+            </article>
+          </div>
+
+          <section class="integration-panel">
+            <div>
+              <h3>실제 로그 연동 설정</h3>
+              <p>값을 입력하면 토출 완료 시 Supabase REST API와 Google Apps Script Web App으로 로그를 전송합니다.</p>
+            </div>
+            <label>
+              Supabase URL
+              <input id="supabaseUrl" type="url" placeholder="https://xxxx.supabase.co" />
+            </label>
+            <label>
+              Supabase anon key
+              <input id="supabaseKey" type="password" placeholder="eyJ..." />
+            </label>
+            <label>
+              Supabase table
+              <input id="supabaseTable" type="text" value="vending_logs" />
+            </label>
+            <label>
+              Google Apps Script Web App URL
+              <input
+                id="sheetWebhookUrl"
+                type="url"
+                value="https://script.google.com/macros/s/AKfycbyAAQQxLscnWyABOn0oILiOYtTEXeLOkRSyFLwGlRXBjsERUPZgNHSjAmqp6cD6MGZXBw/exec"
+                placeholder="https://script.google.com/macros/s/..."
+              />
+            </label>
+            <button id="saveIntegration" class="primary-button">연동 설정 저장</button>
+          </section>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>시간</th>
+                  <th>상품</th>
+                  <th>슬롯</th>
+                  <th>상태</th>
+                  <th>저장 결과</th>
+                </tr>
+              </thead>
+              <tbody id="logRows">
+                <tr>
+                  <td>14:22</td>
+                  <td>비타민 에너지 드링크</td>
+                  <td>A-03</td>
+                  <td><span class="pill success">토출 완료</span></td>
+                  <td>샘플 데이터</td>
+                </tr>
+                <tr>
+                  <td>14:05</td>
+                  <td>프로틴 바</td>
+                  <td>B-01</td>
+                  <td><span class="pill warning">재고 부족</span></td>
+                  <td>샘플 데이터</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="dev" class="view" aria-labelledby="dev-title">
+        <div class="dashboard-layout">
+          <section class="section-head">
+            <p class="eyebrow">Development Page</p>
+            <h2 id="dev-title">개발 작업 리스트</h2>
+            <p class="lead">요구 기능이 빠지지 않도록 실제 구현 단위와 현재 프로토타입 반영 상태를 정리했습니다.</p>
+          </section>
+
+          <div class="worklist">
+            <article class="work-card done">
+              <span class="work-index">01</span>
+              <h3>선택별 추천 변경</h3>
+              <ul>
+                <li>피로감, 집중, 수분, 간식 선택에 따라 추천 상품 변경</li>
+                <li>상품명, 상품 ID, 슬롯, 카트리지 JSON 갱신</li>
+                <li>토출 대상도 현재 추천값 기준으로 변경</li>
+              </ul>
+            </article>
+            <article class="work-card done">
+              <span class="work-index">02</span>
+              <h3>토출 플로우</h3>
+              <ul>
+                <li>사용자 확인 대기</li>
+                <li>하드웨어 명령 전송 시뮬레이션</li>
+                <li>토출 완료 상태 체크</li>
+                <li>로그 저장 단계 표시</li>
+              </ul>
+            </article>
+            <article class="work-card done">
+              <span class="work-index">03</span>
+              <h3>Supabase 연동</h3>
+              <ul>
+                <li>URL, anon key, table 설정 입력</li>
+                <li>토출 완료 시 REST API insert 요청</li>
+                <li>성공/실패 결과 운영자 로그에 표시</li>
+              </ul>
+            </article>
+            <article class="work-card done">
+              <span class="work-index">04</span>
+              <h3>Google Sheets 연동</h3>
+              <ul>
+                <li>Apps Script Web App URL 입력</li>
+                <li>토출 완료 시 POST 요청</li>
+                <li>설정값 없을 때 저장 필요 상태 표시</li>
+              </ul>
+            </article>
+            <article class="work-card pending">
+              <span class="work-index">05</span>
+              <h3>실기기 하드웨어 연동</h3>
+              <ul>
+                <li>시리얼, USB, 블루투스, 로컬 API 중 실제 통신 방식 확정 필요</li>
+                <li>토출 완료 응답 코드와 오류 코드 정의 필요</li>
+                <li>실제 자판기 1대 PoC 테스트 필요</li>
+              </ul>
+            </article>
+            <article class="work-card pending">
+              <span class="work-index">06</span>
+              <h3>Android 앱 패키징</h3>
+              <ul>
+                <li>WebView 또는 네이티브 앱 방식 결정</li>
+                <li>키오스크 모드, 자동 실행, 뒤로가기 제한 구현</li>
+                <li>설치 APK 및 배포 가이드 작성</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="dev-actions">
+            <button class="primary-button" data-view="kiosk">키오스크 화면으로 이동</button>
+            <button class="secondary-button" data-view="operator">운영자 화면 보기</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
   </body>
 </html>
