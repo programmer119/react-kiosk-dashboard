@@ -464,6 +464,53 @@ pre {
   align-self: end;
 }
 
+.sheet-link-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  margin-top: 14px;
+  padding: 18px 20px;
+  border: 1px solid rgba(15, 118, 110, 0.24);
+  border-radius: 8px;
+  background: #f0fdfa;
+}
+
+.sheet-link-panel > div {
+  grid-column: 1 / -1;
+}
+
+.sheet-link-panel span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.sheet-link-panel h3 {
+  margin-bottom: 6px;
+}
+
+.sheet-link-panel p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.sheet-link {
+  overflow: hidden;
+  min-height: 46px;
+  padding: 13px 14px;
+  border: 1px solid rgba(15, 118, 110, 0.24);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -612,7 +659,8 @@ th {
   .recommendation-card,
   .metric-grid,
   .worklist,
-  .integration-panel {
+  .integration-panel,
+  .sheet-link-panel {
     grid-template-columns: 1fr;
   }
 

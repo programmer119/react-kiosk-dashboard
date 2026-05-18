@@ -13,6 +13,8 @@ const dispenseCount = document.querySelector("#dispenseCount");
 const successCount = document.querySelector("#successCount");
 const saveIntegration = document.querySelector("#saveIntegration");
 const languageToggle = document.querySelector("#languageToggle");
+const sheetLink = document.querySelector("#sheetLink");
+const copySheetLink = document.querySelector("#copySheetLink");
 
 const integrationInputs = {
   sheetWebhookUrl: document.querySelector("#sheetWebhookUrl"),
@@ -67,7 +69,7 @@ const languageText = {
   ko: {
     title: "AI 맞춤 추천 무인 자판기",
     navKiosk: "키오스크",
-    navOperator: "운영자",
+    navOperator: "관리자 콘솔",
     navDev: "개발 페이지",
     langButton: "EN",
     heroTitle: "상태를 선택하면 추천 상품이 즉시 바뀝니다",
@@ -84,7 +86,7 @@ const languageText = {
   en: {
     title: "AI Personalized Vending Kiosk",
     navKiosk: "Kiosk",
-    navOperator: "Operator",
+    navOperator: "Admin",
     navDev: "Dev",
     langButton: "KO",
     heroTitle: "Recommendations update as the user selects a need",
@@ -304,6 +306,21 @@ saveIntegration.addEventListener("click", () => {
   });
   updateIntegrationState();
   renderStatus("success", "연동 설정 저장 완료", "다음 토출부터 Google Sheets 전송을 시도합니다.");
+});
+
+copySheetLink.addEventListener("click", async () => {
+  const url = sheetLink.href;
+  try {
+    await navigator.clipboard.writeText(url);
+    copySheetLink.textContent = "복사 완료";
+  } catch (error) {
+    window.prompt("아래 링크를 복사하세요.", url);
+    copySheetLink.textContent = "복사 안내";
+  }
+
+  window.setTimeout(() => {
+    copySheetLink.textContent = "링크 복사";
+  }, 1800);
 });
 
 languageToggle.addEventListener("click", () => {
