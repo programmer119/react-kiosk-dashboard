@@ -158,6 +158,32 @@ h1 {
   font-size: 14px;
 }
 
+.kiosk-mode-card {
+  margin-top: 22px;
+  padding: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.32);
+}
+
+.kiosk-mode-card span {
+  display: block;
+  margin-bottom: 10px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.kiosk-mode-card ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 17px;
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
 .status-dot {
   width: 11px;
   height: 11px;
