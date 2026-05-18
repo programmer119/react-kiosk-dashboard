@@ -15,9 +15,6 @@ const saveIntegration = document.querySelector("#saveIntegration");
 const languageToggle = document.querySelector("#languageToggle");
 
 const integrationInputs = {
-  supabaseUrl: document.querySelector("#supabaseUrl"),
-  supabaseKey: document.querySelector("#supabaseKey"),
-  supabaseTable: document.querySelector("#supabaseTable"),
   sheetWebhookUrl: document.querySelector("#sheetWebhookUrl"),
 };
 
@@ -191,61 +188,21 @@ function renderStatus(dot, label, body) {
 
 function getIntegrationConfig() {
   return {
-    supabaseUrl: localStorage.getItem("supabaseUrl") || "",
-    supabaseKey: localStorage.getItem("supabaseKey") || "",
-    supabaseTable: localStorage.getItem("supabaseTable") || "vending_logs",
-    sheetWebhookUrl:
-      localStorage.getItem("sheetWebhookUrl") ||
-      "https://script.google.com/macros/s/AKfycbyAAQQxLscnWyABOn0oILiOYtTEXeLOkRSyFLwGlRXBjsERUPZgNHSjAmqp6cD6MGZXBw/exec",
+    sheetWebhookUrl: localStorage.getItem("sheetWebhookUrl") || "",
   };
 }
 
 function restoreIntegrationConfig() {
   const config = getIntegrationConfig();
-  integrationInputs.supabaseUrl.value = config.supabaseUrl;
-  integrationInputs.supabaseKey.value = config.supabaseKey;
-  integrationInputs.supabaseTable.value = config.supabaseTable;
   integrationInputs.sheetWebhookUrl.value = config.sheetWebhookUrl;
   updateIntegrationState();
 }
 
 function updateIntegrationState() {
   const config = getIntegrationConfig();
-  const supabaseReady = Boolean(config.supabaseUrl && config.supabaseKey && config.supabaseTable);
   const sheetReady = Boolean(config.sheetWebhookUrl);
 
-  if (supabaseReady && sheetReady) {
-    integrationState.textContent = "2개 연결";
-  } else if (supabaseReady || sheetReady) {
-    integrationState.textContent = "1개 연결";
-  } else {
-    integrationState.textContent = "설정 필요";
-  }
-}
-
-async function sendToSupabase(payload) {
-  const config = getIntegrationConfig();
-  if (!config.supabaseUrl || !config.supabaseKey || !config.supabaseTable) {
-    return "Supabase 설정 필요";
-  }
-
-  const endpoint = `${config.supabaseUrl.replace(/\/$/, "")}/rest/v1/${config.supabaseTable}`;
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: config.supabaseKey,
-      Authorization: `Bearer ${config.supabaseKey}`,
-      Prefer: "return=minimal",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Supabase ${response.status}`);
-  }
-
-  return "Supabase 저장 성공";
+  integrationState.textContent = sheetReady ? "Google Sheets 연결" : "설정 필요";
 }
 
 async function sendToGoogleSheets(payload) {
@@ -270,10 +227,7 @@ async function sendToGoogleSheets(payload) {
 }
 
 async function sendLogs(payload) {
-  const results = await Promise.allSettled([sendToSupabase(payload), sendToGoogleSheets(payload)]);
-  return results
-    .map((result) => (result.status === "fulfilled" ? result.value : result.reason.message))
-    .join(" / ");
+  return sendToGoogleSheets(payload);
 }
 
 function addLogRow(payload, saveResult) {
@@ -311,7 +265,7 @@ async function runDispenseFlow() {
 
   window.setTimeout(async () => {
     const payload = makePayload("success");
-    renderStatus("standby", "Supabase / Google Sheets 저장 중", "토출 이력과 추천 로그를 외부 저장소로 전송합니다.");
+    renderStatus("standby", "Google Sheets 저장 중", "토출 이력과 추천 로그를 Google Sheets로 전송합니다.");
 
     let saveResult = "";
     try {
@@ -349,7 +303,7 @@ saveIntegration.addEventListener("click", () => {
     localStorage.setItem(key, input.value.trim());
   });
   updateIntegrationState();
-  renderStatus("success", "연동 설정 저장 완료", "다음 토출부터 Supabase와 Google Sheets 전송을 시도합니다.");
+  renderStatus("success", "연동 설정 저장 완료", "다음 토출부터 Google Sheets 전송을 시도합니다.");
 });
 
 languageToggle.addEventListener("click", () => {

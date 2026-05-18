@@ -518,6 +518,21 @@ th {
   border-color: rgba(245, 158, 11, 0.48);
 }
 
+.work-card.disabled {
+  border-color: rgba(148, 163, 184, 0.42);
+  background: #f8fafc;
+  color: #94a3b8;
+}
+
+.work-card.disabled .work-index {
+  background: #94a3b8;
+}
+
+.work-card.disabled h3,
+.work-card.disabled ul {
+  color: #94a3b8;
+}
+
 .work-index {
   position: absolute;
   top: 24px;
