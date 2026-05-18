@@ -1,6 +1,6 @@
 # 키오스크 로그 연동 설정
 
-이 프로토타입의 외부 로그 저장은 **Google Sheets** 기준으로 정리했습니다.
+키오스크의 외부 로그 저장은 **Google Sheets** 기준으로 구성합니다.
 
 ## Google Sheets
 
@@ -9,7 +9,7 @@
 3. `google-sheets-apps-script.js` 내용을 붙여 넣습니다.
 4. 배포 > 새 배포 > 웹 앱을 선택합니다.
 5. 실행 권한과 액세스 권한을 테스트 목적에 맞게 설정합니다.
-6. 발급된 Web App URL을 프로토타입 운영자 화면의 `Google Apps Script Web App URL`에 입력합니다.
+6. 발급된 Web App URL을 관리자 콘솔의 `Google Apps Script Web App URL`에 입력합니다.
 
 ## 동작 흐름
 

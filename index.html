@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI 무인 자판기 키오스크 MVP</title>
+    <title>AI 무인 자판기 키오스크</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="app-shell">
       <header class="top-bar">
         <div>
-          <p class="eyebrow">Android Vending Kiosk MVP</p>
+          <p class="eyebrow">Android Vending Kiosk</p>
           <h1>AI 맞춤 추천 무인 자판기</h1>
         </div>
         <nav class="top-actions" aria-label="화면 이동">
@@ -53,7 +53,7 @@
               </div>
               <div class="hero-tools">
                 <div class="clock-card">
-                  <span>PoC 기기</span>
+                  <span>기기</span>
                   <strong>VND-A01</strong>
                 </div>
               </div>
@@ -101,7 +101,7 @@
           <section class="section-head">
             <p class="eyebrow">Admin Console</p>
             <h2 id="operator-title">관리자 콘솔</h2>
-            <p class="lead">토출 이력, 추천 로그, 재고 및 카트리지 상태를 확인하는 MVP 관리자 페이지입니다.</p>
+            <p class="lead">토출 이력, 추천 로그, 재고 및 카트리지 상태를 확인하는 관리자 페이지입니다.</p>
           </section>
 
           <div class="metric-grid">
@@ -193,7 +193,7 @@
           <section class="section-head">
             <p class="eyebrow">Development Page</p>
             <h2 id="dev-title">개발 작업 리스트</h2>
-            <p class="lead">업체 공유용으로 공개 가능한 화면 구성과 현재 반영 상태만 정리했습니다.</p>
+            <p class="lead">키오스크 화면, 관리자 콘솔, 로그 연동 항목을 한눈에 확인합니다.</p>
           </section>
 
           <div class="worklist">
@@ -220,9 +220,9 @@
               <span class="work-index">03</span>
               <h3>Supabase 연동</h3>
               <ul>
-                <li>공개 공유 화면에서는 비활성화</li>
+                <li>현재 저장 방식에서는 비활성화</li>
                 <li>운영 로그 저장은 Google Sheets 기준으로 진행</li>
-                <li>URL, key 등 내부 설정값은 화면에서 미노출</li>
+                <li>URL, key 등 설정값은 화면에 표시하지 않음</li>
               </ul>
             </article>
             <article class="work-card done">
@@ -240,7 +240,7 @@
               <ul>
                 <li>시리얼, USB, 블루투스, 로컬 API 중 실제 통신 방식 확정 필요</li>
                 <li>토출 완료 응답 코드와 오류 코드 정의 필요</li>
-                <li>실제 자판기 1대 PoC 테스트 필요</li>
+                <li>실제 자판기 1대 테스트 필요</li>
               </ul>
             </article>
             <article class="work-card pending">
