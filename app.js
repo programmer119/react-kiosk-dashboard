@@ -119,6 +119,11 @@ function getCurrentRecommendation() {
   return recommendations[currentNeed];
 }
 
+function getKstTimestamp() {
+  const kstOffsetMs = 9 * 60 * 60 * 1000;
+  return new Date(Date.now() + kstOffsetMs).toISOString().replace("Z", "+09:00");
+}
+
 function makePayload(status = "success") {
   const item = getCurrentRecommendation();
   return {
@@ -130,7 +135,7 @@ function makePayload(status = "success") {
     cartridge: item.cartridge,
     quantity: item.quantity,
     dispense_status: status,
-    created_at: new Date().toISOString(),
+    created_at: getKstTimestamp(),
   };
 }
 
@@ -273,6 +278,7 @@ async function sendLogs(payload) {
 
 function addLogRow(payload, saveResult) {
   const time = new Date(payload.created_at).toLocaleTimeString("ko-KR", {
+    timeZone: "Asia/Seoul",
     hour: "2-digit",
     minute: "2-digit",
   });
