@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 
 const SHEET_URL =
   "https://docs.google.com/spreadsheets/d/1CLbEkMD0mO2D6yuYHYg-RyiI2URPNa1OEKVvd82GcCw/edit?gid=1362179551#gid=1362179551";
+const SHEET_WEBHOOK_URL =
+  "https://script.google.com/macros/s/AKfycbyAAQQxLscnWyABOn0oILiOYtTEXeLOkRSyFLwGlRXBjsERUPZgNHSjAmqp6cD6MGZXBw/exec";
 
 const recommendations = {
   fatigue: {
@@ -116,6 +118,19 @@ function makePayload(item) {
   };
 }
 
+async function sendToGoogleSheets(payload) {
+  await fetch(SHEET_WEBHOOK_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  return "Google Sheets 전송 요청 완료";
+}
+
 function StatusDot({ type }) {
   return <span className={`status-dot ${type}`} />;
 }
@@ -194,29 +209,52 @@ export default function App() {
         minute: "2-digit",
       });
 
-      setStatus({
-        dot: "success",
-        label: "토출 완료 및 로그 처리 완료",
-        body: "관리자 콘솔 기록 완료",
-      });
-      setLogs((currentLogs) => [
-        {
-          time,
-          product: payload.product_name,
-          slot: payload.slot,
-          status: "토출 완료",
-          result: "관리자 콘솔 기록 완료",
-          type: "success",
-        },
-        ...currentLogs,
-      ]);
-      setMetrics((currentMetrics) => ({
-        ...currentMetrics,
-        total: currentMetrics.total + 1,
-        success: currentMetrics.success + 1,
-      }));
-      setDispensing(false);
-      setButtonLabel("다시 토출 테스트");
+      sendToGoogleSheets(payload)
+        .then((saveResult) => {
+          setStatus({
+            dot: "success",
+            label: "토출 완료 및 로그 처리 완료",
+            body: saveResult,
+          });
+          setLogs((currentLogs) => [
+            {
+              time,
+              product: payload.product_name,
+              slot: payload.slot,
+              status: "토출 완료",
+              result: saveResult,
+              type: "success",
+            },
+            ...currentLogs,
+          ]);
+          setMetrics((currentMetrics) => ({
+            ...currentMetrics,
+            total: currentMetrics.total + 1,
+            success: currentMetrics.success + 1,
+          }));
+        })
+        .catch((error) => {
+          setStatus({
+            dot: "error",
+            label: "토출 완료 / 로그 전송 확인 필요",
+            body: error.message,
+          });
+          setLogs((currentLogs) => [
+            {
+              time,
+              product: payload.product_name,
+              slot: payload.slot,
+              status: "토출 완료",
+              result: error.message,
+              type: "warning",
+            },
+            ...currentLogs,
+          ]);
+        })
+        .finally(() => {
+          setDispensing(false);
+          setButtonLabel("다시 토출 테스트");
+        });
     }, 1600);
   };
 
@@ -447,7 +485,7 @@ export default function App() {
                 index="04"
                 title="Google Sheets 연동"
                 state="done"
-                items={["토출 로그 시트 링크 표시", "시트 바로 열기 및 링크 복사 제공", "관리자 콘솔에서 화면 로그 확인"]}
+                items={["토출 완료 시 Google Sheets 전송", "시트 바로 열기 및 링크 복사 제공", "관리자 콘솔에서 화면 로그 확인"]}
               />
               <WorkCard
                 index="05"
