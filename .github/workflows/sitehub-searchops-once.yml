@@ -1,0 +1,27 @@
+name: SiteHub SearchOps p18 once
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/sitehub-searchops-once.yml']
+permissions: {contents: write}
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main}
+      - name: Apply pinned SearchOps adapter
+        env:
+          PROJECT_ID: p18
+          PUBLIC_URL: https://programmer119.github.io/react-kiosk-dashboard/
+          PROJECT_NAME: 안드로이드 무인 자판기 AI 맞춤추천 키오스크
+          DESCRIPTION: 무인 자판기에서 AI 맞춤 추천 흐름과 운영 대시보드를 검증하는 키오스크 프로토타입입니다.
+          INDEX_PATH: index.html
+          SITEMAP_PATH: sitemap.xml
+        run: |
+          set -Eeuo pipefail
+          curl -fsSL https://raw.githubusercontent.com/suaveforge/sitehub-deploy/949cbc636e900cbd3504c4a4ecfcc295511c6d70/searchops/static-page-adapter.py -o /tmp/sitehub-searchops.py
+          python /tmp/sitehub-searchops.py
+          git config user.name 'SuaveForge SiteHub'; git config user.email '53187583+programmer119@users.noreply.github.com'
+          git add index.html sitemap.xml
+          if ! git diff --cached --quiet; then git commit -m 'Apply SiteHub SearchOps p18'; git push origin HEAD:main; fi
